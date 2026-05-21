@@ -32,6 +32,7 @@
             width: 100%;
         }
         
+        /* Dropdown Bahasa (Pojok Kiri) */
         .lang-dropdown {
             position: absolute;
             top: 15px;
@@ -40,6 +41,7 @@
             z-index: 100;
         }
         
+        /* Tombol Mode Cahaya Terpisah (Pojok Kanan) */
         .theme-toggle-btn {
             position: absolute;
             top: 15px;
@@ -108,6 +110,7 @@
 
         .settings-box { background: rgba(0,0,0,0.05); padding: 15px; border-radius: 15px; margin: 15px 0; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center; }
         
+        /* Saklar Geser (Toggle Switch) */
         .switch-container {
             display: flex;
             align-items: center;
@@ -156,6 +159,7 @@
             right: 3px;
         }
 
+        /* Tata Letak Tombol Aksi di Menu Utama */
         .action-btns-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -309,6 +313,7 @@
         updateMaddahInfo();
     }
 
+    // FUNGSI BARU: Membuat Link Tautan Berisi Soal-soal (Enkripsi Base64 Aman)
     function shareSelectedMaddah() {
         const m = document.getElementById('select-maddah').value;
         const lang = document.body.getAttribute('lang') || 'ar';
@@ -318,14 +323,19 @@
         }
 
         const payload = { maddahName: m, questions: db[m] };
+        // Mengubah objek soal menjadi string teks lalu dienkripsi ke Base64 agar aman di URL
         const encryptedData = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+        
+        // Membentuk URL utama + parameter data soal
         const shareUrl = window.location.origin + window.location.pathname + "?materi=" + encryptedData;
 
+        // Menyalin tautan langsung ke clipboard HP/Laptop
         navigator.clipboard.writeText(shareUrl).then(() => {
             alert(i18n[lang].alertShare);
         });
     }
 
+    // FUNGSI BARU: Mendeteksi & Mengimpor Tautan Otomatis Saat Web Dibuka
     function checkIncomingMateri() {
         const urlParams = new URLSearchParams(window.location.search);
         const materiData = urlParams.get('materi');
@@ -333,15 +343,18 @@
 
         if (materiData) {
             try {
+                // Membongkar sandi Base64 kembali menjadi struktur data soal
                 const decryptedStr = decodeURIComponent(escape(atob(materiData)));
                 const imported = JSON.parse(decryptedStr);
 
                 if (imported.maddahName && imported.questions) {
+                    // Menyimpan langsung ke database lokal browser penerima
                     db[imported.maddahName] = imported.questions;
                     localStorage.setItem('thoriqMultiMaddah', JSON.stringify(db));
                     
                     alert(i18n[lang].alertImport);
 
+                    // Membersihkan URL browser agar parameter bersih kembali setelah diimpor
                     const cleanUrl = window.location.origin + window.location.pathname;
                     window.history.replaceState({}, document.title, cleanUrl);
                 }
@@ -465,7 +478,7 @@
             document.body.classList.add('dark-mode');
             document.getElementById('dark-toggle').innerText = '☀️';
         }
-        checkIncomingMateri();
+        checkIncomingMateri(); // Cek kiriman soal saat web dibuka
         initMaddahList();
     };
 </script>
