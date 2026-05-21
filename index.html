@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imtiyaz - Memory Vault</title>
+    <title>امتياز - Memory Vault</title>
     <style>
         :root { 
             --primary: #1e4d2b; --accent: #c5a059; --success: #27ae60; --light: #fdfdfd;
@@ -21,12 +21,80 @@
         .container { 
             background: var(--bg-container); width: 100%; max-width: 700px; padding: 30px; border-radius: 20px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 20px; border-top: 5px solid var(--accent); position: relative; 
+            display: flex; flex-direction: column;
         }
-        .lang-switch { position: absolute; top: 15px; left: 15px; display: flex; gap: 5px; z-index: 10; }
-        .lang-btn { padding: 5px 10px; border: 1px solid var(--accent); background: var(--bg-container); color: var(--text-main); cursor: pointer; border-radius: 5px; font-size: 0.75rem; font-weight: bold; }
-        .lang-btn.active { background: var(--accent); color: white; }
-        .brand { text-align: center; margin-bottom: 25px; }
+
+        .header-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+        
+        .lang-dropdown {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: inline-block;
+            z-index: 100;
+        }
+        
+        .theme-toggle-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--bg-container);
+            color: var(--text-main);
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            border: 1px solid var(--accent);
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .dropbtn {
+            background: var(--bg-container);
+            color: var(--text-main);
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border: 1px solid var(--accent);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            left: 0;
+            background-color: var(--bg-container);
+            min-width: 90px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            border: 1px solid var(--input-border);
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        .dropdown-content button {
+            color: var(--text-main);
+            padding: 8px 12px;
+            display: block;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .dropdown-content button:hover {
+            background-color: rgba(197, 160, 89, 0.2);
+        }
+        .show { display: block; }
+
+        .brand { text-align: center; }
         .brand h1 { color: var(--primary); margin: 0; font-size: 2.2rem; }
+        
         textarea, input, select { width: 100%; padding: 12px; border: 2px solid var(--input-border); background: var(--input-bg); color: var(--text-main); border-radius: 10px; box-sizing: border-box; font-family: inherit; margin-bottom: 10px; }
         .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
         .btn-bulk { background: var(--primary); color: white; }
@@ -38,7 +106,63 @@
         #timer-container { width: 100%; height: 10px; background: #eee; border-radius: 5px; margin-bottom: 15px; overflow: hidden; display: none; }
         #timer-bar { width: 100%; height: 100%; background: var(--accent); transition: width 1s linear; }
 
-        .settings-box { background: rgba(0,0,0,0.05); padding: 15px; border-radius: 15px; margin: 15px 0; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: center; }
+        .settings-box { background: rgba(0,0,0,0.05); padding: 15px; border-radius: 15px; margin: 15px 0; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center; }
+        
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: var(--success);
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        body[lang="ar"] input:checked + .slider:before {
+            transform: translateX(-20px);
+        }
+        body[lang="ar"] .slider:before {
+            left: auto;
+            right: 3px;
+        }
+
+        .action-btns-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
         #quiz-section, #result-section { display: none; text-align: center; }
         .answer-box { background: rgba(197, 160, 89, 0.1); border-right: 6px solid var(--accent); padding: 20px; margin-top: 20px; display: none; text-align: right; border-radius: 10px; }
         .eval-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
@@ -51,13 +175,23 @@
 <body lang="ar">
 
 <div id="setup-section" class="container">
-    <div class="lang-switch">
-        <button class="lang-btn id-btn" onclick="setLang('id')">ID</button>
-        <button class="lang-btn en-btn" onclick="setLang('en')">EN</button>
-        <button class="lang-btn ar-btn active" onclick="setLang('ar')">AR</button>
-        <button class="lang-btn" id="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+    <div class="header-wrapper">
+        <div class="lang-dropdown">
+            <button onclick="toggleLangMenu()" class="dropbtn" id="current-lang-btn">🌐 AR</button>
+            <div id="langDropdown" class="dropdown-content">
+                <button onclick="changeLang('id')">ID</button>
+                <button onclick="changeLang('en')">EN</button>
+                <button onclick="changeLang('ar')">AR</button>
+            </div>
+        </div>
+        
+        <button class="theme-toggle-btn" id="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+
+        <div class="brand">
+            <h1 id="txt-title">امتياز</h1>
+            <p id="txt-subtitle">Platform Murojaah Mandiri</p>
+        </div>
     </div>
-    <div class="brand"><h1 id="txt-title">إمتياز</h1><p id="txt-subtitle">Platform Murojaah Mandiri</p></div>
     
     <div style="background: rgba(0,0,0,0.03); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
         <label><b id="txt-label-maddah">اسم المادة:</b></label>
@@ -70,10 +204,13 @@
     <hr style="opacity: 0.2;">
     
     <div class="settings-box">
-        <label style="display: flex; align-items: center; gap: 8px; font-weight: bold;">
-            <input type="checkbox" id="timer-toggle" checked style="width: auto; margin: 0;"> 
-            <span id="txt-timer-on">تفعيل المؤقت</span>
-        </label>
+        <div class="switch-container" onclick="document.getElementById('timer-toggle').click();">
+            <span id="txt-timer-on" style="font-weight: bold;">تفعيل المؤقت</span>
+            <label class="switch" onclick="event.stopPropagation();">
+                <input type="checkbox" id="timer-toggle" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
         <div style="display: flex; align-items: center; gap: 10px;">
             <span id="txt-timer-sec">المدة (ثانية):</span>
             <input type="number" id="timer-duration" value="20" min="5" style="width: 70px; margin: 0; padding: 5px;">
@@ -84,8 +221,13 @@
         <label><b id="txt-label-select">اختر المادة للتدريب:</b></label>
         <select id="select-maddah" onchange="updateMaddahInfo()"></select>
         <p id="count-info">...</p>
+        
         <button id="start-btn" class="btn btn-start" onclick="startQuiz()" disabled>ابدأ التدريب</button>
-        <button class="btn" style="background:transparent; color:#e74c3c; font-size:0.8rem; border: 1px solid #e74c3c;" id="txt-btn-delete" onclick="deleteSelectedMaddah()">حذف المادة</button>
+        
+        <div class="action-btns-grid">
+            <button class="btn" style="background:transparent; color:#e74c3c; font-size:0.8rem; border: 1px solid #e74c3c; margin:0;" id="txt-btn-delete" onclick="deleteSelectedMaddah()">حذف المادة</button>
+            <button class="btn" style="background:transparent; color:#3498db; font-size:0.8rem; border: 1px solid #3498db; margin:0;" id="txt-btn-share" onclick="shareSelectedMaddah()">🔗 مشاركة المادة</button>
+        </div>
     </div>
 </div>
 
@@ -109,12 +251,34 @@
 
 <script>
     const i18n = {
-        id: { title: "Imtiyaz", subtitle: "Latih Memori & Murojaah Mandiri", lMaddah: "Nama Mata Kuliah (Maddah):", lInput: "Input Materi (Soal : Jawaban):", btnSave: "Simpan Materi", lSelect: "Pilih Materi untuk Latihan:", btnDelete: "Hapus Maddah Ini", btnStart: "Mulai Latihan Acak", btnReveal: "Buka Jawaban", lAns: "Kunci Jawaban:", btnWrong: "Lupa / Salah", btnCorrect: "Hafal / Benar", resTitle: "Hasil Evaluasi", btnRestart: "Kembali ke Menu Utama", countMsg: (n) => `Terdeteksi ${n} soal.`, tOn: "Aktifkan Timer", tSec: "Durasi (detik):" },
-        ar: { title: "إمتياز", subtitle: "منصة تدريب الذاكرة والمراجعة", lMaddah: "اسم المادة:", lInput: "إدخل البيانات:", btnSave: "حفظ البيانات", lSelect: "اختر المادة:", btnDelete: "حذف هذه المادة", btnStart: "ابدأ التدريب", btnReveal: "إظهار الإجابة", lAns: "الإجابة الصحيحة:", btnWrong: "نسيت", btnCorrect: "حفظت", resTitle: "النتيجة النهائية", btnRestart: "العودة للقائمة", countMsg: (n) => `تم العثور على ${n} أسئلة.`, tOn: "تفعيل المؤقت", tSec: "المدة (ثانية):" },
-        en: { title: "Imtiyaz", subtitle: "Memory Training & Self-Murojaah", lMaddah: "Subject Name:", lInput: "Data Input:", btnSave: "Save Materials", lSelect: "Choose Subject:", btnDelete: "Delete Subject", btnStart: "Start Random Practice", btnReveal: "Show Answer", lAns: "Correct Answer:", btnWrong: "Forgot", btnCorrect: "Memorized", resTitle: "Final Result", btnRestart: "Back to Menu", countMsg: (n) => `Found ${n} questions.`, tOn: "Enable Timer", tSec: "Duration (sec):" }
+        id: { subtitle: "Latih Memori & Murojaah Mandiri", lMaddah: "Nama Mata Kuliah (Maddah):", lInput: "Input Materi (Soal : Jawaban):", btnSave: "Simpan Materi", lSelect: "Pilih Materi untuk Latihan:", btnDelete: "Hapus Maddah Ini", btnShare: "🔗 Bagikan Materi", btnStart: "Mulai Latihan Acak", btnReveal: "Buka Jawaban", lAns: "Kunci Jawaban:", btnWrong: "Lupa / Salah", btnCorrect: "Hafal / Benar", resTitle: "Hasil Evaluasi", btnRestart: "Kembali ke Menu Utama", countMsg: (n) => `Terdeteksi ${n} soal.`, tOn: "Aktifkan Timer", tSec: "Durasi (detik):", alertShare: "Tautan berhasil disalin! Silakan bagikan ke teman-teman.", alertNoData: "Pilih materi terlebih dahulu sebelum membagikan.", alertImport: "Materi baru berhasil diimpor otomatis!" },
+        ar: { subtitle: "منصة تدريب الذاكرة والمراجعة", lMaddah: "اسم المادة:", lInput: "إدخل البيانات:", btnSave: "حفظ البيانات", lSelect: "اختر المادة:", btnDelete: "حذف هذه المادة", btnShare: "🔗 مشاركة المادة", btnStart: "ابدأ التدريب", btnReveal: "إظهار الإجابة", lAns: "الإجابة الصحيحة:", btnWrong: "نسيت", btnCorrect: "حفظت", resTitle: "النتيجة النهائية", btnRestart: "العودة للقائمة", countMsg: (n) => `تم العثور على ${n} أسئلة.`, tOn: "تفعيل المؤقت", tSec: "المدة (ثانية):", alertShare: "تم نسخ الرابط بنجاح! شاركه مع زملائك.", alertNoData: "الرجاء اختيار المادة أولاً.", alertImport: "تم استيراد المادة الجديدة بنجاح تلقائياً!" },
+        en: { subtitle: "Memory Training & Self-Murojaah", lMaddah: "Subject Name:", lInput: "Data Input:", btnSave: "Save Materials", lSelect: "Choose Subject:", btnDelete: "Delete Subject", btnShare: "🔗 Share Subject", btnStart: "Start Random Practice", btnReveal: "Show Answer", lAns: "Correct Answer:", btnWrong: "Forgot", btnCorrect: "Memorized", resTitle: "Final Result", btnRestart: "Back to Menu", countMsg: (n) => `Found ${n} questions.`, tOn: "Enable Timer", tSec: "Duration (sec):", alertShare: "Link copied to clipboard! Share it with your friends.", alertNoData: "Please select a subject first.", alertImport: "New subject imported successfully!" }
     };
 
     let db = JSON.parse(localStorage.getItem('thoriqMultiMaddah')) || {};
+
+    function toggleLangMenu() {
+        document.getElementById("langDropdown").classList.toggle("show");
+    }
+
+    function changeLang(lang) {
+        setLang(lang);
+        document.getElementById("current-lang-btn").innerText = "🌐 " + lang.toUpperCase();
+        document.getElementById("langDropdown").classList.remove("show");
+    }
+
+    window.addEventListener('click', function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            const dropdowns = document.getElementsByClassName("dropdown-content");
+            for (let i = 0; i < dropdowns.length; i++) {
+                const openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    });
 
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
@@ -125,18 +289,14 @@
 
     function setLang(lang) {
         document.body.setAttribute('lang', lang);
-        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        const btn = document.querySelector('.' + lang + '-btn');
-        if(btn) btn.classList.add('active');
-        
         const t = i18n[lang];
-        document.getElementById('txt-title').innerText = t.title;
         document.getElementById('txt-subtitle').innerText = t.subtitle;
         document.getElementById('txt-label-maddah').innerText = t.lMaddah;
         document.getElementById('txt-label-input').innerText = t.lInput;
         document.getElementById('txt-btn-save').innerText = t.btnSave;
         document.getElementById('txt-label-select').innerText = t.lSelect;
         document.getElementById('txt-btn-delete').innerText = t.btnDelete;
+        document.getElementById('txt-btn-share').innerText = t.btnShare;
         document.getElementById('start-btn').innerText = t.btnStart;
         document.getElementById('reveal-btn').innerText = t.btnReveal;
         document.getElementById('txt-label-ans').innerText = t.lAns;
@@ -147,6 +307,48 @@
         document.getElementById('txt-timer-on').innerText = t.tOn;
         document.getElementById('txt-timer-sec').innerText = t.tSec;
         updateMaddahInfo();
+    }
+
+    function shareSelectedMaddah() {
+        const m = document.getElementById('select-maddah').value;
+        const lang = document.body.getAttribute('lang') || 'ar';
+        if (!m || !db[m]) {
+            alert(i18n[lang].alertNoData);
+            return;
+        }
+
+        const payload = { maddahName: m, questions: db[m] };
+        const encryptedData = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+        const shareUrl = window.location.origin + window.location.pathname + "?materi=" + encryptedData;
+
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            alert(i18n[lang].alertShare);
+        });
+    }
+
+    function checkIncomingMateri() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const materiData = urlParams.get('materi');
+        const lang = document.body.getAttribute('lang') || 'ar';
+
+        if (materiData) {
+            try {
+                const decryptedStr = decodeURIComponent(escape(atob(materiData)));
+                const imported = JSON.parse(decryptedStr);
+
+                if (imported.maddahName && imported.questions) {
+                    db[imported.maddahName] = imported.questions;
+                    localStorage.setItem('thoriqMultiMaddah', JSON.stringify(db));
+                    
+                    alert(i18n[lang].alertImport);
+
+                    const cleanUrl = window.location.origin + window.location.pathname;
+                    window.history.replaceState({}, document.title, cleanUrl);
+                }
+            } catch (e) {
+                console.error("Gagal membaca enkripsi data link share.", e);
+            }
+        }
     }
 
     function processBulk() {
@@ -263,6 +465,7 @@
             document.body.classList.add('dark-mode');
             document.getElementById('dark-toggle').innerText = '☀️';
         }
+        checkIncomingMateri();
         initMaddahList();
     };
 </script>
