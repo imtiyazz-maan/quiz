@@ -24,7 +24,6 @@
             display: flex; flex-direction: column;
         }
 
-        /* FORMAT CSS: Dropdown Bahasa di Kiri, Mode Cahaya di Kanan */
         .header-wrapper {
             display: flex;
             flex-direction: column;
@@ -215,9 +214,10 @@
     </div>
 
     <div style="text-align: center;">
-        <label><b id="txt-label-select">اختر Matedi للتدريب:</b></label>
+        <label><b id="txt-label-select">اختر المادة للتدريب:</b></label>
         <select id="select-maddah" onchange="updateMaddahInfo()"></select>
         <p id="count-info">...</p>
+        
         <button id="start-btn" class="btn btn-start" onclick="startQuiz()" disabled>ابدأ التدريب</button>
         <button class="btn" style="background:transparent; color:#e74c3c; font-size:0.8rem; border: 1px solid #e74c3c;" id="txt-btn-delete" onclick="deleteSelectedMaddah()">حذف المادة</button>
     </div>
@@ -281,9 +281,7 @@
 
     function setLang(lang) {
         document.body.setAttribute('lang', lang);
-        
         const t = i18n[lang];
-        // Baris pengubah teks h1 telah dihapus agar tulisan Arab 'امتياز' bersifat permanen
         document.getElementById('txt-subtitle').innerText = t.subtitle;
         document.getElementById('txt-label-maddah').innerText = t.lMaddah;
         document.getElementById('txt-label-input').innerText = t.lInput;
