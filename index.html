@@ -24,6 +24,7 @@
             display: flex; flex-direction: column;
         }
 
+        /* FORMAT CSS: Dropdown Bahasa di Kiri, Mode Cahaya di Kanan */
         .header-wrapper {
             display: flex;
             flex-direction: column;
@@ -159,14 +160,6 @@
             right: 3px;
         }
 
-        /* Tata Letak Tombol Aksi di Menu Utama */
-        .action-btns-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
         #quiz-section, #result-section { display: none; text-align: center; }
         .answer-box { background: rgba(197, 160, 89, 0.1); border-right: 6px solid var(--accent); padding: 20px; margin-top: 20px; display: none; text-align: right; border-radius: 10px; }
         .eval-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
@@ -222,16 +215,11 @@
     </div>
 
     <div style="text-align: center;">
-        <label><b id="txt-label-select">اختر المادة للتدريب:</b></label>
+        <label><b id="txt-label-select">اختر Matedi للتدريب:</b></label>
         <select id="select-maddah" onchange="updateMaddahInfo()"></select>
         <p id="count-info">...</p>
-        
         <button id="start-btn" class="btn btn-start" onclick="startQuiz()" disabled>ابدأ التدريب</button>
-        
-        <div class="action-btns-grid">
-            <button class="btn" style="background:transparent; color:#e74c3c; font-size:0.8rem; border: 1px solid #e74c3c; margin:0;" id="txt-btn-delete" onclick="deleteSelectedMaddah()">حذف المادة</button>
-            <button class="btn" style="background:transparent; color:#3498db; font-size:0.8rem; border: 1px solid #3498db; margin:0;" id="txt-btn-share" onclick="shareSelectedMaddah()">🔗 مشاركة المادة</button>
-        </div>
+        <button class="btn" style="background:transparent; color:#e74c3c; font-size:0.8rem; border: 1px solid #e74c3c;" id="txt-btn-delete" onclick="deleteSelectedMaddah()">حذف المادة</button>
     </div>
 </div>
 
@@ -255,9 +243,9 @@
 
 <script>
     const i18n = {
-        id: { subtitle: "Latih Memori & Murojaah Mandiri", lMaddah: "Nama Mata Kuliah (Maddah):", lInput: "Input Materi (Soal : Jawaban):", btnSave: "Simpan Materi", lSelect: "Pilih Materi untuk Latihan:", btnDelete: "Hapus Maddah Ini", btnShare: "🔗 Bagikan Materi", btnStart: "Mulai Latihan Acak", btnReveal: "Buka Jawaban", lAns: "Kunci Jawaban:", btnWrong: "Lupa / Salah", btnCorrect: "Hafal / Benar", resTitle: "Hasil Evaluasi", btnRestart: "Kembali ke Menu Utama", countMsg: (n) => `Terdeteksi ${n} soal.`, tOn: "Aktifkan Timer", tSec: "Durasi (detik):", alertShare: "Tautan berhasil disalin! Silakan bagikan ke teman-teman.", alertNoData: "Pilih materi terlebih dahulu sebelum membagikan.", alertImport: "Materi baru berhasil diimpor otomatis!" },
-        ar: { subtitle: "منصة تدريب الذاكرة والمراجعة", lMaddah: "اسم المادة:", lInput: "إدخل البيانات:", btnSave: "حفظ البيانات", lSelect: "اختر المادة:", btnDelete: "حذف هذه المادة", btnShare: "🔗 مشاركة المادة", btnStart: "ابدأ التدريب", btnReveal: "إظهار الإجابة", lAns: "الإجابة الصحيحة:", btnWrong: "نسيت", btnCorrect: "حفظت", resTitle: "النتيجة النهائية", btnRestart: "العودة للقائمة", countMsg: (n) => `تم العثور على ${n} أسئلة.`, tOn: "تفعيل المؤقت", tSec: "المدة (ثانية):", alertShare: "تم نسخ الرابط بنجاح! شاركه مع زملائك.", alertNoData: "الرجاء اختيار المادة أولاً.", alertImport: "تم استيراد المادة الجديدة بنجاح تلقائياً!" },
-        en: { subtitle: "Memory Training & Self-Murojaah", lMaddah: "Subject Name:", lInput: "Data Input:", btnSave: "Save Materials", lSelect: "Choose Subject:", btnDelete: "Delete Subject", btnShare: "🔗 Share Subject", btnStart: "Start Random Practice", btnReveal: "Show Answer", lAns: "Correct Answer:", btnWrong: "Forgot", btnCorrect: "Memorized", resTitle: "Final Result", btnRestart: "Back to Menu", countMsg: (n) => `Found ${n} questions.`, tOn: "Enable Timer", tSec: "Duration (sec):", alertShare: "Link copied to clipboard! Share it with your friends.", alertNoData: "Please select a subject first.", alertImport: "New subject imported successfully!" }
+        id: { subtitle: "Latih Memori & Murojaah Mandiri", lMaddah: "Nama Mata Kuliah (Maddah):", lInput: "Input Materi (Soal : Jawaban):", btnSave: "Simpan Materi", lSelect: "Pilih Materi untuk Latihan:", btnDelete: "Hapus Maddah Ini", btnStart: "Mulai Latihan Acak", btnReveal: "Buka Jawaban", lAns: "Kunci Jawaban:", btnWrong: "Lupa / Salah", btnCorrect: "Hafal / Benar", resTitle: "Hasil Evaluasi", btnRestart: "Kembali ke Menu Utama", countMsg: (n) => `Terdeteksi ${n} soal.`, tOn: "Aktifkan Timer", tSec: "Durasi (detik):" },
+        ar: { subtitle: "منصة تدريب الذاكرة والمراجعة", lMaddah: "اسم المادة:", lInput: "إدخل البيانات:", btnSave: "حفظ البيانات", lSelect: "اختر المادة:", btnDelete: "حذف هذه المادة", btnStart: "ابدأ التدريب", btnReveal: "إظهار الإجابة", lAns: "الإجابة الصحيحة:", btnWrong: "نسيت", btnCorrect: "حفظت", resTitle: "النتيجة النهائية", btnRestart: "العودة للقائمة", countMsg: (n) => `تم العثور على ${n} أسئلة.`, tOn: "تفعيل المؤقت", tSec: "المدة (ثانية):" },
+        en: { subtitle: "Memory Training & Self-Murojaah", lMaddah: "Subject Name:", lInput: "Data Input:", btnSave: "Save Materials", lSelect: "Choose Subject:", btnDelete: "Delete Subject", btnStart: "Start Random Practice", btnReveal: "Show Answer", lAns: "Correct Answer:", btnWrong: "Forgot", btnCorrect: "Memorized", resTitle: "Final Result", btnRestart: "Back to Menu", countMsg: (n) => `Found ${n} questions.`, tOn: "Enable Timer", tSec: "Duration (sec):" }
     };
 
     let db = JSON.parse(localStorage.getItem('thoriqMultiMaddah')) || {};
@@ -293,14 +281,15 @@
 
     function setLang(lang) {
         document.body.setAttribute('lang', lang);
+        
         const t = i18n[lang];
+        // Baris pengubah teks h1 telah dihapus agar tulisan Arab 'امتياز' bersifat permanen
         document.getElementById('txt-subtitle').innerText = t.subtitle;
         document.getElementById('txt-label-maddah').innerText = t.lMaddah;
         document.getElementById('txt-label-input').innerText = t.lInput;
         document.getElementById('txt-btn-save').innerText = t.btnSave;
         document.getElementById('txt-label-select').innerText = t.lSelect;
         document.getElementById('txt-btn-delete').innerText = t.btnDelete;
-        document.getElementById('txt-btn-share').innerText = t.btnShare;
         document.getElementById('start-btn').innerText = t.btnStart;
         document.getElementById('reveal-btn').innerText = t.btnReveal;
         document.getElementById('txt-label-ans').innerText = t.lAns;
@@ -311,57 +300,6 @@
         document.getElementById('txt-timer-on').innerText = t.tOn;
         document.getElementById('txt-timer-sec').innerText = t.tSec;
         updateMaddahInfo();
-    }
-
-    // FUNGSI BARU: Membuat Link Tautan Berisi Soal-soal (Enkripsi Base64 Aman)
-    function shareSelectedMaddah() {
-        const m = document.getElementById('select-maddah').value;
-        const lang = document.body.getAttribute('lang') || 'ar';
-        if (!m || !db[m]) {
-            alert(i18n[lang].alertNoData);
-            return;
-        }
-
-        const payload = { maddahName: m, questions: db[m] };
-        // Mengubah objek soal menjadi string teks lalu dienkripsi ke Base64 agar aman di URL
-        const encryptedData = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-        
-        // Membentuk URL utama + parameter data soal
-        const shareUrl = window.location.origin + window.location.pathname + "?materi=" + encryptedData;
-
-        // Menyalin tautan langsung ke clipboard HP/Laptop
-        navigator.clipboard.writeText(shareUrl).then(() => {
-            alert(i18n[lang].alertShare);
-        });
-    }
-
-    // FUNGSI BARU: Mendeteksi & Mengimpor Tautan Otomatis Saat Web Dibuka
-    function checkIncomingMateri() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const materiData = urlParams.get('materi');
-        const lang = document.body.getAttribute('lang') || 'ar';
-
-        if (materiData) {
-            try {
-                // Membongkar sandi Base64 kembali menjadi struktur data soal
-                const decryptedStr = decodeURIComponent(escape(atob(materiData)));
-                const imported = JSON.parse(decryptedStr);
-
-                if (imported.maddahName && imported.questions) {
-                    // Menyimpan langsung ke database lokal browser penerima
-                    db[imported.maddahName] = imported.questions;
-                    localStorage.setItem('thoriqMultiMaddah', JSON.stringify(db));
-                    
-                    alert(i18n[lang].alertImport);
-
-                    // Membersihkan URL browser agar parameter bersih kembali setelah diimpor
-                    const cleanUrl = window.location.origin + window.location.pathname;
-                    window.history.replaceState({}, document.title, cleanUrl);
-                }
-            } catch (e) {
-                console.error("Gagal membaca enkripsi data link share.", e);
-            }
-        }
     }
 
     function processBulk() {
@@ -478,7 +416,6 @@
             document.body.classList.add('dark-mode');
             document.getElementById('dark-toggle').innerText = '☀️';
         }
-        checkIncomingMateri(); // Cek kiriman soal saat web dibuka
         initMaddahList();
     };
 </script>
